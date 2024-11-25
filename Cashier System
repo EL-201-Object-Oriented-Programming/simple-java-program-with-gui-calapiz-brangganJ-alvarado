@@ -1,0 +1,149 @@
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.DecimalFormat;
+
+public class Welcome extends JFrame {
+    private JLabel labelItem, labelPrice, labelQuantity, labelTotal;
+    private JTextField textItem, textPrice, textQuantity, textTotal;
+    private JButton addButton, checkoutButton, clearButton;
+    private JTextArea receiptArea;
+    private double totalAmount = 0.0;
+    private String username;
+
+    public Welcome(String username) {
+        this.username = username;
+
+        setTitle("Cashier System - Welcome, " + username);
+        setSize(600, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+
+        labelItem = new JLabel("Item Name:");
+        labelPrice = new JLabel("Price per Item:");
+        labelQuantity = new JLabel("Quantity:");
+        labelTotal = new JLabel("Total Amount:");
+
+        textItem = new JTextField(20);
+        textPrice = new JTextField(20);
+        textQuantity = new JTextField(20);
+        textTotal = new JTextField(20);
+        textTotal.setEditable(false);
+
+        addButton = new JButton("Add Item");
+        checkoutButton = new JButton("Checkout");
+        clearButton = new JButton("Clear");
+
+        receiptArea = new JTextArea(12, 40);
+        receiptArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(receiptArea);
+
+        Font boldFont = new Font("Arial", Font.BOLD, 18);
+        labelItem.setFont(boldFont);
+        labelPrice.setFont(boldFont);
+        labelQuantity.setFont(boldFont);
+        labelTotal.setFont(boldFont);
+        addButton.setFont(boldFont);
+        checkoutButton.setFont(boldFont);
+        clearButton.setFont(boldFont);
+        textItem.setFont(new Font("Arial", Font.PLAIN, 18));
+        textPrice.setFont(new Font("Arial", Font.PLAIN, 18));
+        textQuantity.setFont(new Font("Arial", Font.PLAIN, 18));
+        textTotal.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(5, 2, 10, 10));
+        panel.setBackground(new Color(135, 206, 235));
+        panel.add(labelItem);
+        panel.add(textItem);
+        panel.add(labelPrice);
+        panel.add(textPrice);
+        panel.add(labelQuantity);
+        panel.add(textQuantity);
+        panel.add(labelTotal);
+        panel.add(textTotal);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(135, 206, 235));
+        buttonPanel.add(addButton);
+        buttonPanel.add(checkoutButton);
+        buttonPanel.add(clearButton);
+
+        add(panel, BorderLayout.NORTH);
+        add(buttonPanel, BorderLayout.SOUTH);
+        add(scrollPane, BorderLayout.CENTER);
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String itemName = textItem.getText();
+                    double price = Double.parseDouble(textPrice.getText());
+                    int quantity = Integer.parseInt(textQuantity.getText());
+
+                    if (itemName.isEmpty() || price <= 0 || quantity <= 0) {
+                        JOptionPane.showMessageDialog(null, "Invalid input, please check the fields.");
+                        return;
+                    }
+
+                    double totalItemCost = price * quantity;
+                    totalAmount += totalItemCost;
+
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    textTotal.setText("$" + df.format(totalAmount));
+                    receiptArea.append(itemName + " - $" + df.format(price) + " x " + quantity + " = $" + df.format(totalItemCost) + "\n");
+                    textItem.setText("");
+                    textPrice.setText("");
+                    textQuantity.setText("");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter valid numbers for price and quantity.");
+                }
+            }
+        });
+
+        checkoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (totalAmount > 0) {
+                    double tax = totalAmount * 0.07;
+                    double finalTotal = totalAmount + tax;
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    receiptArea.append("\n----------------------------------------\n");
+                    receiptArea.append("Subtotal: $" + df.format(totalAmount) + "\n");
+                    receiptArea.append("Tax (7%): $" + df.format(tax) + "\n");
+                    receiptArea.append("Total: $" + df.format(finalTotal) + "\n");
+                    receiptArea.append("Thank you for shopping!\n");
+                    totalAmount = 0.0;
+                    textTotal.setText("$0.00");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No items to checkout.");
+                }
+            }
+        });
+
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textItem.setText("");
+                textPrice.setText("");
+                textQuantity.setText("");
+                textTotal.setText("$0.00");
+                receiptArea.setText("");
+                totalAmount = 0.0;
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                String username = "JUSTINE CLEIDE";
+                new Welcome(username).setVisible(true);
+            }
+        });
+    }
+}
+```
