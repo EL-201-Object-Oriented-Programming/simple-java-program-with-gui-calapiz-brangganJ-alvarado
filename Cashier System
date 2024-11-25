@@ -1,4 +1,4 @@
-
+@@ -0,0 +1,151 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -55,7 +55,7 @@ public class Welcome extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(5, 2, 10, 10));
-        panel.setBackground(new Color(135, 206, 235));
+        panel.setBackground(Color.PINK);  
         panel.add(labelItem);
         panel.add(textItem);
         panel.add(labelPrice);
@@ -66,7 +66,7 @@ public class Welcome extends JFrame {
         panel.add(textTotal);
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(135, 206, 235));
+        buttonPanel.setBackground(Color.PINK);  
         buttonPanel.add(addButton);
         buttonPanel.add(checkoutButton);
         buttonPanel.add(clearButton);
@@ -92,8 +92,10 @@ public class Welcome extends JFrame {
                     totalAmount += totalItemCost;
 
                     DecimalFormat df = new DecimalFormat("#.##");
-                    textTotal.setText("$" + df.format(totalAmount));
-                    receiptArea.append(itemName + " - $" + df.format(price) + " x " + quantity + " = $" + df.format(totalItemCost) + "\n");
+                    textTotal.setText("₱" + df.format(totalAmount));
+
+                    receiptArea.append(itemName + " - ₱" + df.format(price) + " x " + quantity + " = ₱" + df.format(totalItemCost) + "\n");
+
                     textItem.setText("");
                     textPrice.setText("");
                     textQuantity.setText("");
@@ -110,13 +112,15 @@ public class Welcome extends JFrame {
                     double tax = totalAmount * 0.07;
                     double finalTotal = totalAmount + tax;
                     DecimalFormat df = new DecimalFormat("#.##");
+
                     receiptArea.append("\n----------------------------------------\n");
-                    receiptArea.append("Subtotal: $" + df.format(totalAmount) + "\n");
-                    receiptArea.append("Tax (7%): $" + df.format(tax) + "\n");
-                    receiptArea.append("Total: $" + df.format(finalTotal) + "\n");
+                    receiptArea.append("Subtotal: ₱" + df.format(totalAmount) + "\n");
+                    receiptArea.append("Tax (7%): ₱" + df.format(tax) + "\n");
+                    receiptArea.append("Total: ₱" + df.format(finalTotal) + "\n");
                     receiptArea.append("Thank you for shopping!\n");
+
                     totalAmount = 0.0;
-                    textTotal.setText("$0.00");
+                    textTotal.setText("₱0.00");
                 } else {
                     JOptionPane.showMessageDialog(null, "No items to checkout.");
                 }
@@ -129,7 +133,7 @@ public class Welcome extends JFrame {
                 textItem.setText("");
                 textPrice.setText("");
                 textQuantity.setText("");
-                textTotal.setText("$0.00");
+                textTotal.setText("₱0.00");
                 receiptArea.setText("");
                 totalAmount = 0.0;
             }
@@ -146,4 +150,3 @@ public class Welcome extends JFrame {
         });
     }
 }
-```
